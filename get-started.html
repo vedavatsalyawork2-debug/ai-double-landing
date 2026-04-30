@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Started — AI Double</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0a0b0f;--ink2:#1a1d28;--ink3:#2c3045;
+  --paper:#f5f3ef;--white:#fff;--mist:#f0eee9;
+  --border:rgba(255,255,255,0.09);--bl:#e2ddd6;
+  --blue:#2563eb;--blue-l:#3b82f6;--blue-ll:#dbeafe;
+  --green:#059669;--green-l:#d1fae5;
+  --gold:#d97706;--gold-l:#fef3c7;
+  --red:#dc2626;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
+  --r:10px;
+}
+html{height:100%}
+body{min-height:100vh;background:var(--paper);color:var(--ink);font-family:var(--sans);display:flex;flex-direction:column}
+
+/* ── TOP NAV ── */
+.top-nav{
+  background:var(--ink);display:flex;align-items:center;
+  justify-content:space-between;padding:0 40px;height:58px;
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none}
+.brand-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--blue),#1d4ed8);display:flex;align-items:center;justify-content:center;}
+.brand-icon svg{width:14px;height:14px;fill:white}
+.brand-name{font-family:var(--serif);font-size:1.05rem;color:white}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-login-link{font-size:.83rem;color:rgba(245,243,239,.5);text-decoration:none;font-weight:500}
+.nav-login-link:hover{color:white}
+
+/* ── PROGRESS BAR ── */
+.progress-outer{height:3px;background:rgba(255,255,255,.08);position:relative;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--blue-l));transition:width .4s ease;border-radius:0 2px 2px 0}
+
+/* ── MAIN LAYOUT ── */
+.main{display:flex;flex:1;min-height:0}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:260px;flex-shrink:0;background:var(--ink);
+  padding:32px 0;overflow-y:auto;
+  border-right:1px solid var(--border);
+  position:sticky;top:61px;height:calc(100vh - 61px);
+}
+.sidebar-label{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,243,239,.3);padding:0 24px;margin-bottom:12px}
+.step-nav{list-style:none}
+.step-nav-item{display:flex;align-items:center;gap:12px;padding:10px 24px;cursor:pointer;transition:background .15s;position:relative}
+.step-nav-item:hover{background:rgba(255,255,255,.04)}
+.step-nav-item.active{background:rgba(37,99,235,.1)}
+.step-nav-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--blue);border-radius:0 3px 3px 0}
+.step-nav-item.done .step-dot{background:var(--green);border-color:var(--green)}
+.step-nav-item.done .step-dot::after{content:'✓';font-size:.65rem;color:white}
+.step-nav-item.active .step-dot{background:var(--blue);border-color:var(--blue)}
+.step-dot{
+  width:26px;height:26px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:700;color:rgba(245,243,239,.5);
+  flex-shrink:0;transition:all .2s;
+}
+.step-nav-item.active .step-dot{color:white}
+.step-nav-item.done .step-dot .dot-num{display:none}
+.step-info{flex:1}
+.step-title{font-size:.83rem;font-weight:600;color:rgba(245,243,239,.6);line-height:1.2}
+.step-nav-item.active .step-title,.step-nav-item.done .step-title{color:white}
+.step-sub{font-size:.72rem;color:rgba(245,243,239,.3);margin-top:2px}
+
+/* ── CONTENT ── */
+.content-area{flex:1;overflow-y:auto;padding:48px 56px 80px}
+.step-panel{display:none;animation:paneIn .25s ease}
+.step-panel.active{display:block}
+@keyframes paneIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.step-h{font-family:var(--serif);font-size:2.1rem;font-weight:400;letter-spacing:-.04em;line-height:1.12;color:var(--ink);margin-bottom:8px}
+.step-h em{font-style:italic;color:var(--blue)}
+.step-desc{font-size:.875rem;color:#666;line-height:1.7;max-width:560px;margin-bottom:36px}
+
+/* ── FORM ELEMENTS ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;margin-bottom:24px}
+.form-grid.one{grid-template-columns:1fr}
+.form-grid.three{grid-template-columns:1fr 1fr 1fr}
+.form-group{display:flex;flex-direction:column;gap:7px}
+.form-group.full{grid-column:1/-1}
+label,
+.field-label{font-size:.75rem;font-weight:700;color:#888;letter-spacing:.06em;text-transform:uppercase}
+input[type=text],input[type=email],input[type=password],input[type=tel],input[type=url],input[type=number],select,textarea{
+  width:100%;padding:11px 14px;border-radius:8px;
+  border:1.5px solid var(--bl);background:var(--white);
+  color:var(--ink);font-family:var(--sans);font-size:.875rem;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+input::placeholder,textarea::placeholder{color:#bbb}
+textarea{resize:vertical;min-height:80px}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+
+/* ── SECTION CARD ── */
+.form-card{background:var(--white);border:1.5px solid var(--bl);border-radius:14px;padding:24px;margin-bottom:20px}
+.form-card-title{font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.form-card-title .card-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.form-card-title .card-icon svg{width:14px;height:14px}
+
+/* ── SOCIAL SIGN UP ── */
+.social-btns{display:flex;flex-direction:column;gap:11px;max-width:480px;margin-bottom:28px}
+.btn-social{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 20px;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:background .15s,transform .1s;border:1.5px solid var(--bl);background:var(--white);color:var(--ink)}
+.btn-social:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.btn-social svg{width:20px;height:20px;flex-shrink:0}
+.btn-google{border-color:#dadce0}
+.btn-facebook{background:#1877f2;color:white;border-color:#1877f2}
+.btn-facebook:hover{background:#166fe5}
+.btn-instagram{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:white;border:none}
+
+.divider{display:flex;align-items:center;gap:14px;margin-bottom:28px;max-width:480px}
+.divider-line{flex:1;height:1px;background:var(--bl)}
+.divider-text{font-size:.72rem;color:#aaa;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── AI PROFILE BRIEF ── */
+.ai-brief{
+  background:linear-gradient(135deg,var(--blue-ll),#eff6ff);
+  border:1.5px solid rgba(37,99,235,.2);border-radius:12px;
+  padding:18px 20px;margin-bottom:20px;
+}
+.ai-brief-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.ai-brief-label svg{width:13px;height:13px;stroke:var(--blue)}
+.ai-brief-text{font-size:.82rem;color:#3b4b6b;line-height:1.65}
+textarea.ai-brief-input{background:white;border-color:rgba(37,99,235,.2);margin-top:10px;min-height:70px}
+textarea.ai-brief-input:focus{border-color:var(--blue)}
+
+/* ── TAGS ── */
+.tag-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.tag{padding:6px 14px;border-radius:100px;border:1.5px solid var(--bl);font-size:.8rem;font-weight:600;color:#666;cursor:pointer;transition:all .15s;user-select:none}
+.tag:hover{border-color:var(--blue);color:var(--blue)}
+.tag.on{background:var(--blue-ll);border-color:var(--blue);color:var(--blue)}
+
+/* ── SELECT CARDS ── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-top:8px}
+.sel-card{
+  border:1.5px solid var(--bl);border-radius:12px;padding:20px 16px;
+  cursor:pointer;transition:all .15s;text-align:center;
+  background:var(--white);
+}
+.sel-card:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(37,99,235,.1)}
+.sel-card.on{border-color:var(--blue);background:var(--blue-ll);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.sel-card-icon{font-size:1.8rem;margin-bottom:10px}
+.sel-card-title{font-size:.875rem;font-weight:700;color:var(--ink)}
+.sel-card-sub{font-size:.75rem;color:#888;margin-top:4px;line-height:1.45}
+
+/* ── REPEATABLE ROWS ── */
+.repeat-table{width:100%;border-collapse:collapse;margin-top:8px}
+.repeat-table th{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#aaa;padding:0 8px 10px;text-align:left}
+.repeat-table td{padding:4px 4px}
+.repeat-table td input,.repeat-table td select,.repeat-table td textarea{
+  padding:9px 11px;font-size:.82rem;
+}
+.repeat-table .del-row{padding:4px 0 4px 4px}
+.btn-del-row{background:none;border:none;color:#ccc;cursor:pointer;padding:6px;border-radius:6px;transition:color .15s,background .15s;font-size:1.1rem;line-height:1}
+.btn-del-row:hover{color:var(--red);background:rgba(220,38,38,.08)}
+.btn-add-row{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:8px 16px;border-radius:8px;background:var(--mist);border:1.5px dashed var(--bl);color:#888;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.btn-add-row:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-ll)}
+
+/* ── HOURS GRID ── */
+.hours-grid{display:grid;grid-template-columns:70px 1fr 1fr 80px;gap:8px;align-items:center;margin-top:8px}
+.hours-grid .h-day{font-size:.82rem;font-weight:600;color:var(--ink)}
+.hours-grid input[type=time]{padding:8px 10px;font-size:.82rem}
+.toggle-sm{width:40px;height:22px;border-radius:11px;background:#ddd;border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle-sm.on{background:var(--green)}
+.toggle-sm::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:white;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle-sm.on::after{transform:translateX(18px)}
+
+/* ── DATA SOURCES ── */
+.sources-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.source-card{border:1.5px solid var(--bl);border-radius:12px;padding:16px 14px;cursor:pointer;transition:all .15s;background:var(--white)}
+.source-card:hover{border-color:var(--blue);box-shadow:0 4px 14px rgba(37,99,235,.08)}
+.source-card.on{border-color:var(--blue);background:var(--blue-ll)}
+.source-card-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.source-logo{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.source-name{font-size:.875rem;font-weight:700;color:var(--ink)}
+.source-desc{font-size:.77rem;color:#888;line-height:1.5}
+.source-url-field{margin-top:12px;display:none}
+.source-card.on .source-url-field{display:block}
+
+/* ── PLAN CARDS ── */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:600px}
+.plan-card{border:2px solid var(--bl);border-radius:16px;padding:28px;cursor:pointer;transition:all .2s;background:var(--white)}
+.plan-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.12)}
+.plan-card.on{border-color:var(--blue);background:var(--ink);color:white}
+.plan-card.on .plan-price{color:white}
+.plan-card.on .plan-per{color:rgba(245,243,239,.45)}
+.plan-card.on .plan-feature{color:rgba(245,243,239,.7)}
+.plan-card.on .check{color:#34d399}
+.plan-badge{font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:14px;display:inline-block}
+.plan-badge.free{background:rgba(5,150,105,.12);color:var(--green)}
+.plan-card.on .plan-badge.free{background:rgba(5,150,105,.2);color:#34d399}
+.plan-name{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#999;margin-bottom:4px}
+.plan-price{font-family:var(--serif);font-size:3rem;font-weight:400;letter-spacing:-.06em;color:var(--ink);line-height:1}
+.plan-price sup{font-size:1.2rem;font-family:var(--sans);letter-spacing:0;vertical-align:super}
+.plan-per{font-size:.78rem;color:#aaa;margin-top:4px;margin-bottom:18px}
+.plan-div{height:1px;background:var(--bl);margin-bottom:18px}
+.plan-card.on .plan-div{background:rgba(255,255,255,.1)}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:9px}
+.plan-feature{display:flex;align-items:flex-start;gap:8px;font-size:.84rem;color:#555}
+.check{color:var(--green);font-weight:700;flex-shrink:0}
+.trial-note-plan{background:var(--gold-l);border:1px solid rgba(217,119,6,.25);border-radius:10px;padding:14px 16px;margin-bottom:24px;font-size:.85rem;color:#78350f;line-height:1.6}
+.trial-note-plan strong{color:#92400e}
+
+/* ── REVIEW ── */
+.review-section{background:var(--white);border:1.5px solid var(--bl);border-radius:14px;padding:22px;margin-bottom:16px}
+.review-title{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.review-edit{font-size:.75rem;color:var(--blue);font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0}
+.review-edit:hover{text-decoration:underline}
+.review-row{display:grid;grid-template-columns:140px 1fr;gap:8px;margin-bottom:8px;font-size:.84rem}
+.review-key{color:#888;font-weight:600}
+.review-val{color:var(--ink)}
+
+/* ── AI SCORE ── */
+.score-ring-wrap{display:flex;align-items:center;gap:32px;background:linear-gradient(135deg,var(--ink),var(--ink2));border-radius:14px;padding:28px 32px;margin-bottom:24px}
+.score-ring-svg{flex-shrink:0}
+.score-ring-info h3{font-family:var(--serif);font-size:1.4rem;color:white;margin-bottom:6px}
+.score-ring-info p{font-size:.83rem;color:rgba(245,243,239,.55);line-height:1.6;max-width:340px}
+.score-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.score-bar-card{background:var(--white);border:1.5px solid var(--bl);border-radius:10px;padding:14px 12px}
+.score-bar-llm{font-size:.72rem;font-weight:700;color:#666;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.score-bar-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.score-bar-track{height:6px;background:var(--mist);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.score-bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.score-bar-val{font-size:.78rem;font-weight:700;color:var(--ink)}
+.suggestions{background:var(--gold-l);border:1px solid rgba(217,119,6,.25);border-radius:12px;padding:18px 20px;margin-bottom:24px}
+.suggestions-title{font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.suggestion-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:.84rem;color:#78350f;line-height:1.5}
+.suggestion-item:last-child{margin-bottom:0}
+.sugg-num{width:20px;height:20px;border-radius:50%;background:rgba(217,119,6,.2);color:var(--gold);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* ── FOOTER NAV ── */
+.step-footer{display:flex;align-items:center;justify-content:space-between;margin-top:40px;padding-top:24px;border-top:1.5px solid var(--bl)}
+.btn-back{display:flex;align-items:center;gap:7px;padding:11px 22px;border-radius:9px;background:var(--mist);border:1.5px solid var(--bl);color:#666;font-size:.88rem;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s}
+.btn-back:hover{border-color:#999;color:var(--ink)}
+.btn-next{display:flex;align-items:center;gap:8px;padding:12px 28px;border-radius:9px;background:var(--blue);color:white;border:none;font-size:.9rem;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;box-shadow:0 4px 14px rgba(37,99,235,.3)}
+.btn-next:hover{background:var(--blue-l);transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.4)}
+.btn-launch{background:linear-gradient(135deg,var(--green),#047857);box-shadow:0 4px 14px rgba(5,150,105,.35);font-size:1rem;padding:14px 36px}
+.btn-launch:hover{box-shadow:0 8px 24px rgba(5,150,105,.45)}
+.step-counter{font-size:.8rem;color:#aaa;font-weight:500}
+
+/* ── SUCCESS SCREEN ── */
+#success-screen{display:none;text-align:center;padding:80px 48px}
+.success-icon{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--green),#047857);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 8px 28px rgba(5,150,105,.3)}
+.success-icon svg{width:34px;height:34px;stroke:white;stroke-width:2.5}
+#success-screen h2{font-family:var(--serif);font-size:2.6rem;color:var(--ink);margin-bottom:14px;letter-spacing:-.04em}
+#success-screen p{font-size:1rem;color:#666;max-width:500px;margin:0 auto 32px;line-height:1.7}
+.success-mcp{background:var(--ink);border-radius:12px;padding:20px 24px;max-width:560px;margin:0 auto 32px;text-align:left}
+.mcp-url-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,243,239,.4);margin-bottom:10px}
+.mcp-url{font-family:var(--mono);font-size:.82rem;color:#34d399;word-break:break-all;line-height:1.6}
+
+@media(max-width:860px){.sidebar{display:none}.content-area{padding:32px 20px 60px}}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="brand" href="aidouble-light.html">
+    <div class="brand-icon"><svg viewBox="0 0 16 16"><path d="M8 1L1 5v6l7 4 7-4V5L8 1zm0 2l5 2.9V11L8 13.9 3 11V5.9L8 3z"/></svg></div>
+    <span class="brand-name">AI Double</span>
+  </a>
+  <div class="nav-right">
+    <a href="login.html" class="nav-login-link">Already have an account? Log in →</a>
+  </div>
+</nav>
+
+<div class="progress-outer">
+  <div class="progress-fill" id="prog" style="width:0%"></div>
+</div>
+
+<div class="main">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-label">Your Setup</div>
+    <ul class="step-nav" id="step-nav">
+      <li class="step-nav-item active" onclick="goTo(0)"><div class="step-dot"><span class="dot-num">0</span></div><div class="step-info"><div class="step-title">Sign Up / Login</div><div class="step-sub">Create your account</div></div></li>
+      <li class="step-nav-item future" onclick="goTo(1)"><div class="step-dot"><span class="dot-num">1</span></div><div class="step-info"><div class="step-title">Account Details</div><div class="step-sub">Your info + data sources</div></div></li>
+      <li class="step-nav-item future" onclick="goTo(2)"><div class="step-dot"><span class="dot-num">2</span></div><div class="step-info"><div class="step-title">Business Information</div><div class="step-sub">Who you are to AI</div></div></li>
+      <li class="step-nav-item future" onclick="goTo(3)"><div class="step-dot"><span class="dot-num">3</span></div><div class="step-info"><div class="step-title">Business Type</div><div class="step-sub">Services, products or both</div></div></li>
+      <li class="step-nav-item future" onclick="goTo(4)"><div class="step-dot"><span class="dot-num">4A</span></div><div class="step-info"><div class="step-title">Services Setup</div><div class="step-sub">What you offer</div></div></li>
+      <li class="step-nav-item future" onclick="goTo(5)"><div class="step-dot"><span class="dot-num">4B</span></div><div class="step-info"><div class="step-title">Products Setup</div><div class="step-sub">Your catalogue</div></div></li>
+      <li class="step-nav-item future" onclick="goTo(6)"><div class="step-dot"><span class="dot-num">4C</span></div><div class="step-info"><div class="step-title">AI Optimization</div><div class="step-sub">Target & keywords</div></div></li>
+      <li class="step-nav-item future" onclick="goTo(7)"><div class="step-dot"><span class="dot-num">5</span></div><div class="step-info"><div class="step-title">Plan Selection</div><div class="step-sub">3 months free</div></div></li>
+      <li class="step-nav-item future" onclick="goTo(8)"><div class="step-dot"><span class="dot-num">6</span></div><div class="step-info"><div class="step-title">Review &amp; Launch</div><div class="step-sub">Go live</div></div></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content-area">
+
+    <!-- ═══ STEP 0: SIGN UP ═══ -->
+    <div class="step-panel active" id="step-0">
+      <h2 class="step-h">Create your <em>AI Double</em> account</h2>
+      <p class="step-desc">Sign up with your social profile to instantly pull your existing business info into your setup, or register manually.</p>
+
+      <div class="social-btns">
+        <a href="#" class="btn-social btn-google" onclick="socialSignup('google')">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Sign up with Google
+        </a>
+        <a href="#" class="btn-social btn-facebook" onclick="socialSignup('facebook')">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Sign up with Facebook
+        </a>
+        <a href="#" class="btn-social" onclick="socialSignup('instagram')" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:white;border:none">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          Sign up with Instagram
+        </a>
+      </div>
+
+      <div class="divider" style="max-width:480px">
+        <div class="divider-line"></div>
+        <span class="divider-text">or continue manually</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="form-card" style="max-width:480px">
+        <div class="form-grid one">
+          <div class="form-group"><label>Work Email</label><input type="email" id="s0-email" placeholder="you@business.com"></div>
+          <div class="form-group"><label>Password</label><input type="password" id="s0-pw" placeholder="Min 8 characters"></div>
+          <div class="form-group"><label>Confirm Password</label><input type="password" id="s0-pw2" placeholder="Repeat password"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <span class="step-counter">Step 0 of 8</span>
+        <button class="btn-next" onclick="nx()">Continue <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 1: ACCOUNT DETAILS ═══ -->
+    <div class="step-panel" id="step-1">
+      <h2 class="step-h">Your account <em>details</em></h2>
+      <p class="step-desc">Tell us about you and where your existing business data lives so we can pre-fill your profile.</p>
+
+      <div class="form-card">
+        <div class="form-card-title">
+          <div class="card-icon" style="background:#dbeafe"><svg viewBox="0 0 14 14" fill="none" stroke="#2563eb" stroke-width="1.5"><circle cx="7" cy="4" r="2.5"/><path d="M1.5 12.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg></div>
+          Personal Information
+        </div>
+        <div class="form-grid">
+          <div class="form-group"><label>First Name</label><input type="text" id="s1-fn" placeholder="Alex"></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="s1-ln" placeholder="Johnson"></div>
+          <div class="form-group"><label>Work Email</label><input type="email" id="s1-em" placeholder="alex@business.com"></div>
+          <div class="form-group"><label>Phone Number</label><input type="tel" id="s1-ph" placeholder="+1 (555) 000-0000"></div>
+          <div class="form-group"><label>Role / Position</label>
+            <select id="s1-role">
+              <option value="">Select role...</option>
+              <option>Owner</option><option>Manager</option><option>Marketing Lead</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Company Size</label>
+            <select id="s1-size">
+              <option value="">Select size...</option>
+              <option>Solo (Just me)</option><option>2–10 employees</option><option>10–50 employees</option><option>50+ employees</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATA SOURCES -->
+      <div class="form-card">
+        <div class="form-card-title">
+          <div class="card-icon" style="background:#d1fae5"><svg viewBox="0 0 14 14" fill="none" stroke="#059669" stroke-width="1.5"><path d="M7 1v12M1 7h12"/></svg></div>
+          Where Is Your Business Data?
+        </div>
+        <p style="font-size:.84rem;color:#666;line-height:1.6;margin-bottom:18px">Select all the platforms where you already have a business presence. We'll automatically pull your existing data into your AI Double profile — saving you time.</p>
+        <div class="sources-grid">
+          <div class="source-card" onclick="toggleSource(this,'gmb')">
+            <div class="source-card-top">
+              <div class="source-logo" style="background:#fef9c3"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+              <div class="source-name">Google Business</div>
+            </div>
+            <div class="source-desc">Business hours, reviews, services, location — pulled automatically.</div>
+            <div class="source-url-field"><input type="url" placeholder="https://business.google.com/..." onclick="event.stopPropagation()"></div>
+          </div>
+          <div class="source-card" onclick="toggleSource(this,'fb')">
+            <div class="source-card-top">
+              <div class="source-logo" style="background:#dbeafe"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
+              <div class="source-name">Facebook Page</div>
+            </div>
+            <div class="source-desc">Business description, photos, hours, contact info.</div>
+            <div class="source-url-field"><input type="url" placeholder="https://facebook.com/your-page" onclick="event.stopPropagation()"></div>
+          </div>
+          <div class="source-card" onclick="toggleSource(this,'insta')">
+            <div class="source-card-top">
+              <div class="source-logo" style="background:#fce7f3"><svg width="20" height="20" viewBox="0 0 24 24" fill="url(#ig-grad)"><defs><linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#f09433"/><stop offset="50%" style="stop-color:#dc2743"/><stop offset="100%" style="stop-color:#bc1888"/></linearGradient></defs><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+              <div class="source-name">Instagram</div>
+            </div>
+            <div class="source-desc">Bio, contact info, product photos, story highlights.</div>
+            <div class="source-url-field"><input type="url" placeholder="https://instagram.com/your-handle" onclick="event.stopPropagation()"></div>
+          </div>
+          <div class="source-card" onclick="toggleSource(this,'yelp')">
+            <div class="source-card-top">
+              <div class="source-logo" style="background:#fee2e2"><svg width="20" height="20" viewBox="0 0 24 24" fill="#d9232d"><path d="M20.16 12.594l-4.995 1.433c-.96.275-1.786-.8-1.21-1.64l2.902-4.308c.592-.88 1.87-.5 1.938.552l.364 4.56a.898.898 0 01-.999.403zm-7.99 1.69l.084 5.072c.016 1.063-1.296 1.529-1.972.735l-2.91-3.444c-.606-.717-.089-1.81.828-1.745l3.63.261a.9.9 0 011.34 1.122zm1.302-1.31l4.476-2.463c.866-.475 1.774.504 1.315 1.395L17.26 15.77c-.44.864-1.685.683-1.877-.268l-.453-2.178a.9.9 0 01.541-1.349zm-2.14-1.045l-5.065.394c-1.068.083-1.527-1.23-.725-1.902l3.453-2.9c.72-.604 1.81-.083 1.742.836l-.26 3.638a.9.9 0 01-1.145-.066zm.874-2.58l-.67-5.037c-.145-1.06 1.148-1.594 1.85-.803l2.975 3.385c.62.704.12 1.798-.798 1.748l-3.62-.202a.9.9 0 01-1.268-1.091z"/></svg></div>
+              <div class="source-name">Yelp</div>
+            </div>
+            <div class="source-desc">Reviews, business info, photos, service categories.</div>
+            <div class="source-url-field"><input type="url" placeholder="https://yelp.com/biz/..." onclick="event.stopPropagation()"></div>
+          </div>
+          <div class="source-card" onclick="toggleSource(this,'website')">
+            <div class="source-card-top">
+              <div class="source-logo" style="background:#ede9fe"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#7c3aed" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><path d="M10 2a8 8 0 010 16M2 10h16"/></svg></div>
+              <div class="source-name">Your Website</div>
+            </div>
+            <div class="source-desc">Services, about page, contact info, pricing — scraped and structured.</div>
+            <div class="source-url-field"><input type="url" placeholder="https://yourbusiness.com" onclick="event.stopPropagation()"></div>
+          </div>
+          <div class="source-card" onclick="toggleSource(this,'linkedin')">
+            <div class="source-card-top">
+              <div class="source-logo" style="background:#dbeafe"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0077b5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+              <div class="source-name">LinkedIn</div>
+            </div>
+            <div class="source-desc">Company page, services, team, business description.</div>
+            <div class="source-url-field"><input type="url" placeholder="https://linkedin.com/company/..." onclick="event.stopPropagation()"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="btn-back" onclick="bk()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4l-4 4 4 4"/></svg> Back</button>
+        <span class="step-counter">Step 1 of 8</span>
+        <button class="btn-next" onclick="nx()">Continue <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 2: BUSINESS INFORMATION ═══ -->
+    <div class="step-panel" id="step-2">
+      <h2 class="step-h">Business <em>information</em></h2>
+      <p class="step-desc">Tell AI exactly who you are — this data becomes your MCP business-info endpoint.</p>
+
+      <div class="form-card">
+        <div class="form-card-title"><div class="card-icon" style="background:#dbeafe"><svg viewBox="0 0 14 14" fill="none" stroke="#2563eb" stroke-width="1.5"><rect x="2" y="2" width="10" height="10" rx="2"/></svg></div>Basic Details</div>
+        <div class="form-grid">
+          <div class="form-group full"><label>Business Name</label><input type="text" id="biz-name" placeholder="e.g. StyleCo Barbershop"></div>
+          <div class="form-group"><label>Business Category</label>
+            <select id="biz-cat" onchange="loadSubcat()">
+              <option value="">Select category...</option>
+              <option>Beauty & Personal Care</option><option>Health & Wellness</option><option>Food & Beverage</option><option>Retail & Shopping</option><option>Home Services</option><option>Professional Services</option><option>Education & Tutoring</option><option>Technology</option><option>Fitness & Sports</option><option>Entertainment</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Subcategory</label>
+            <select id="biz-subcat"><option value="">Select subcategory...</option></select>
+          </div>
+          <div class="form-group full"><label>Short Business Description</label><textarea id="biz-desc" placeholder="2–3 sentences describing what your business does and who it serves..." style="min-height:90px"></textarea></div>
+          <div class="form-group"><label>Website URL (optional)</label><input type="url" placeholder="https://yourbusiness.com"></div>
+          <div class="form-group"><label>Google Business Profile (optional)</label><input type="url" placeholder="https://business.google.com/..."></div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title"><div class="card-icon" style="background:#fce7f3"><svg viewBox="0 0 14 14" fill="none" stroke="#9d174d" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M7 3v4l2.5 1.5"/></svg></div>Social Links</div>
+        <div class="form-grid three">
+          <div class="form-group"><label>Instagram</label><input type="url" placeholder="instagram.com/handle"></div>
+          <div class="form-group"><label>Facebook</label><input type="url" placeholder="facebook.com/page"></div>
+          <div class="form-group"><label>LinkedIn</label><input type="url" placeholder="linkedin.com/company/..."></div>
+        </div>
+        <div class="form-group" style="margin-top:12px"><label>Business Logo</label><input type="file" accept="image/*" style="padding:9px 12px;background:var(--mist);color:#666;cursor:pointer"></div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title"><div class="card-icon" style="background:#d1fae5"><svg viewBox="0 0 14 14" fill="none" stroke="#059669" stroke-width="1.5"><path d="M7 1C4.2 1 2 3.2 2 6c0 3.7 5 9 5 9s5-5.3 5-9c0-2.8-2.2-5-5-5z"/><circle cx="7" cy="6" r="1.5"/></svg></div>Address</div>
+        <div class="form-grid">
+          <div class="form-group full"><label>Street Address</label><input type="text" placeholder="123 Main Street, Suite 4"></div>
+          <div class="form-group"><label>City</label><input type="text" placeholder="San Francisco"></div>
+          <div class="form-group"><label>State / Region</label><input type="text" placeholder="California"></div>
+          <div class="form-group"><label>Country</label><input type="text" placeholder="United States"></div>
+          <div class="form-group"><label>Postcode / ZIP</label><input type="text" placeholder="94102"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="btn-back" onclick="bk()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4l-4 4 4 4"/></svg> Back</button>
+        <span class="step-counter">Step 2 of 8</span>
+        <button class="btn-next" onclick="nx()">Continue <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 3: BUSINESS TYPE ═══ -->
+    <div class="step-panel" id="step-3">
+      <h2 class="step-h">Business <em>type &amp; goal</em></h2>
+      <p class="step-desc">Help AI understand your model so it recommends you for the right queries.</p>
+
+      <div class="ai-brief">
+        <div class="ai-brief-label"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9l-3.5 2.4 1.3-4L1.5 5H5.5z"/></svg> AI Profiling Brief</div>
+        <div class="ai-brief-text">What is your <strong>key competitive advantage</strong>? Why do customers choose you over competitors? This helps AI cite you when intent signals match your unique strengths.</div>
+        <textarea class="ai-brief-input" placeholder="e.g. We are the fastest walk-in barbershop in the Mission, open 7 days, with specialist fade artists. We cater to professionals who value precision and speed."></textarea>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">Business Type</div>
+        <div class="card-grid">
+          <div class="sel-card on" data-group="btype" onclick="selCard(this,'btype')">
+            <div class="sel-card-icon">✂️</div>
+            <div class="sel-card-title">Services Only</div>
+            <div class="sel-card-sub">Appointments, consultations, treatments</div>
+          </div>
+          <div class="sel-card" data-group="btype" onclick="selCard(this,'btype')">
+            <div class="sel-card-icon">📦</div>
+            <div class="sel-card-title">Products Only</div>
+            <div class="sel-card-sub">Physical or digital goods</div>
+          </div>
+          <div class="sel-card" data-group="btype" onclick="selCard(this,'btype')">
+            <div class="sel-card-icon">🛍️</div>
+            <div class="sel-card-title">Services + Products</div>
+            <div class="sel-card-sub">Both appointments and retail</div>
+          </div>
+          <div class="sel-card" data-group="btype" onclick="selCard(this,'btype')">
+            <div class="sel-card-icon">💻</div>
+            <div class="sel-card-title">Digital / Online</div>
+            <div class="sel-card-sub">SaaS, courses, consulting</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">Primary Goal</div>
+        <div class="card-grid">
+          <div class="sel-card on" data-group="goal" onclick="selCard(this,'goal')">
+            <div class="sel-card-icon">🎯</div>
+            <div class="sel-card-title">Get Leads</div>
+            <div class="sel-card-sub">Enquiries and quote requests</div>
+          </div>
+          <div class="sel-card" data-group="goal" onclick="selCard(this,'goal')">
+            <div class="sel-card-icon">📅</div>
+            <div class="sel-card-title">Get Bookings</div>
+            <div class="sel-card-sub">Appointments confirmed by AI</div>
+          </div>
+          <div class="sel-card" data-group="goal" onclick="selCard(this,'goal')">
+            <div class="sel-card-icon">🛒</div>
+            <div class="sel-card-title">Sell Products</div>
+            <div class="sel-card-sub">Orders via AI conversations</div>
+          </div>
+          <div class="sel-card" data-group="goal" onclick="selCard(this,'goal')">
+            <div class="sel-card-icon">📈</div>
+            <div class="sel-card-title">Increase Visibility</div>
+            <div class="sel-card-sub">More AI citations and mentions</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="btn-back" onclick="bk()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4l-4 4 4 4"/></svg> Back</button>
+        <span class="step-counter">Step 3 of 8</span>
+        <button class="btn-next" onclick="nx()">Continue <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4A: SERVICES ═══ -->
+    <div class="step-panel" id="step-4">
+      <h2 class="step-h">Your <em>services</em></h2>
+      <p class="step-desc">Define each service offered. AI platforms use this to match customers with exactly what you do.</p>
+
+      <div class="form-card">
+        <div class="form-card-title">Service Tags</div>
+        <div class="tag-wrap" id="svc-tags">
+          <span class="tag on" onclick="toggleTag(this)">Haircut</span>
+          <span class="tag on" onclick="toggleTag(this)">Hair Colouring</span>
+          <span class="tag on" onclick="toggleTag(this)">Beard Trim</span>
+          <span class="tag on" onclick="toggleTag(this)">Fade</span>
+          <span class="tag" onclick="toggleTag(this)">Skin Fade</span>
+          <span class="tag" onclick="toggleTag(this)">Shave</span>
+          <span class="tag" onclick="toggleTag(this)">Consultation</span>
+          <span class="tag" onclick="toggleTag(this)">Hair Treatment</span>
+          <span class="tag" onclick="toggleTag(this)">Kids Haircut</span>
+          <span class="tag" onclick="toggleTag(this)">Waxing</span>
+          <span class="tag" onclick="toggleTag(this)">Nail Care</span>
+          <span class="tag" onclick="toggleTag(this)">Massage</span>
+        </div>
+        <div style="margin-top:12px"><input type="text" placeholder="+ Add custom tag (press Enter)" onkeydown="addCustomTag(this,event,'svc-tags')" style="max-width:300px"></div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">Service Catalogue</div>
+        <table class="repeat-table" id="svc-table">
+          <thead><tr>
+            <th>Service Name</th><th>Description</th><th>Price ($)</th>
+            <th>Duration</th><th>Mode</th><th>Booking URL</th><th></th>
+          </tr></thead>
+          <tbody id="svc-tbody">
+            <tr>
+              <td><input type="text" value="Classic Haircut" placeholder="Service name"></td>
+              <td><input type="text" value="Precision cut with wash & style" placeholder="Brief description"></td>
+              <td><input type="number" value="45" style="width:80px"></td>
+              <td><select style="width:100px"><option>30 min</option><option>45 min</option><option selected>60 min</option><option>90 min</option></select></td>
+              <td><select style="width:90px"><option>Offline</option><option>Online</option><option>Both</option></select></td>
+              <td><input type="url" placeholder="book.me/..."></td>
+              <td class="del-row"><button class="btn-del-row" onclick="delRow(this)">×</button></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="Beard Trim & Shape" placeholder="Service name"></td>
+              <td><input type="text" value="Full beard sculpt with hot towel" placeholder="Brief description"></td>
+              <td><input type="number" value="30" style="width:80px"></td>
+              <td><select style="width:100px"><option selected>30 min</option><option>45 min</option><option>60 min</option></select></td>
+              <td><select style="width:90px"><option selected>Offline</option><option>Online</option><option>Both</option></select></td>
+              <td><input type="url" placeholder="book.me/..."></td>
+              <td class="del-row"><button class="btn-del-row" onclick="delRow(this)">×</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn-add-row" onclick="addSvcRow()">+ Add Service</button>
+      </div>
+
+      <div class="ai-brief">
+        <div class="ai-brief-label"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9l-3.5 2.4 1.3-4L1.5 5H5.5z"/></svg> AI Profiling — Services</div>
+        <div class="ai-brief-text">What makes your services stand out? Specialisations, unique techniques, awards, years of experience?</div>
+        <textarea class="ai-brief-input" placeholder="e.g. Our fade artists trained in London and NYC. We specialise in textured hair and carry Oribe products. We hold the 2024 Bay Area Best Barbershop award."></textarea>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">Availability Hours</div>
+        <div class="hours-grid" style="font-size:.75rem;color:#aaa;font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--bl);margin-bottom:10px">
+          <span>Day</span><span>Opens</span><span>Closes</span><span>Status</span>
+        </div>
+        <div id="hours-rows"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="btn-back" onclick="bk()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4l-4 4 4 4"/></svg> Back</button>
+        <span class="step-counter">Step 4A of 8</span>
+        <button class="btn-next" onclick="nx()">Continue <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4B: PRODUCTS ═══ -->
+    <div class="step-panel" id="step-5">
+      <h2 class="step-h">Your <em>products</em></h2>
+      <p class="step-desc">Add products to your AI Double catalogue so customers can order directly through AI conversations.</p>
+
+      <div class="form-card">
+        <div class="form-card-title">Product Catalogue</div>
+        <table class="repeat-table" id="prod-table">
+          <thead><tr>
+            <th>Product Name</th><th>Category</th><th>Price ($)</th>
+            <th>Stock</th><th>SKU</th><th>Description</th><th></th>
+          </tr></thead>
+          <tbody id="prod-tbody">
+            <tr>
+              <td><input type="text" value="Oribe Hair Balm" placeholder="Product name"></td>
+              <td><input type="text" value="Hair Care" placeholder="Category"></td>
+              <td><input type="number" value="38" style="width:80px"></td>
+              <td><select style="width:90px"><option selected>In Stock</option><option>Low Stock</option><option>Out of Stock</option></select></td>
+              <td><input type="text" value="ORB-HB-001" style="width:110px"></td>
+              <td><input type="text" value="Premium styling balm for texture & hold" placeholder="Description"></td>
+              <td class="del-row"><button class="btn-del-row" onclick="delRow(this)">×</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn-add-row" onclick="addProdRow()">+ Add Product</button>
+      </div>
+
+      <div class="ai-brief">
+        <div class="ai-brief-label"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9l-3.5 2.4 1.3-4L1.5 5H5.5z"/></svg> AI Profiling — Products</div>
+        <div class="ai-brief-text">What makes your products special? Exclusive brands, quality guarantees, or unique selection?</div>
+        <textarea class="ai-brief-input" placeholder="e.g. We stock only professional-grade products not available in retail stores. Our stylists personally curate every brand."></textarea>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">Commerce &amp; Fulfilment</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Delivery / Fulfilment</label>
+            <select><option>Pickup Only</option><option>Local Delivery</option><option>Nationwide Shipping</option><option>Digital Download</option><option>All Options</option></select>
+          </div>
+          <div class="form-group"><label>Shipping Time</label><input type="text" placeholder="e.g. 3–5 business days"></div>
+          <div class="form-group"><label>Currency</label>
+            <select><option>USD – US Dollar</option><option>GBP – British Pound</option><option>EUR – Euro</option><option>INR – Indian Rupee</option><option>AED – UAE Dirham</option><option>ZAR – South African Rand</option></select>
+          </div>
+          <div class="form-group"><label>Tax Included in Price?</label>
+            <select><option>Yes – tax included</option><option>No – tax added at checkout</option></select>
+          </div>
+          <div class="form-group full"><label>Return &amp; Refund Policy</label><textarea placeholder="e.g. Unopened products can be returned within 14 days with receipt. No refunds on opened products."></textarea></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="btn-back" onclick="bk()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4l-4 4 4 4"/></svg> Back</button>
+        <span class="step-counter">Step 4B of 8</span>
+        <button class="btn-next" onclick="nx()">Continue <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4C: AI OPTIMIZATION ═══ -->
+    <div class="step-panel" id="step-6">
+      <h2 class="step-h">AI <em>optimization</em></h2>
+      <p class="step-desc">Fine-tune who finds you and how you're described across AI platforms.</p>
+
+      <div class="form-card">
+        <div class="form-card-title">Target Customer Type</div>
+        <div class="tag-wrap">
+          <span class="tag on" onclick="toggleTag(this)">Professionals</span>
+          <span class="tag on" onclick="toggleTag(this)">Men</span>
+          <span class="tag" onclick="toggleTag(this)">Women</span>
+          <span class="tag" onclick="toggleTag(this)">Students</span>
+          <span class="tag" onclick="toggleTag(this)">Families</span>
+          <span class="tag" onclick="toggleTag(this)">Businesses / B2B</span>
+          <span class="tag" onclick="toggleTag(this)">Seniors</span>
+          <span class="tag" onclick="toggleTag(this)">Tourists</span>
+          <span class="tag" onclick="toggleTag(this)">Athletes</span>
+          <span class="tag" onclick="toggleTag(this)">Young Adults</span>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">Top Keywords (what customers search)</div>
+        <div class="tag-wrap" id="kw-tags">
+          <span class="tag on" onclick="toggleTag(this)">best barbershop near me</span>
+          <span class="tag on" onclick="toggleTag(this)">haircut with fade</span>
+          <span class="tag on" onclick="toggleTag(this)">beard trim SF</span>
+          <span class="tag" onclick="toggleTag(this)">walk-in haircut</span>
+          <span class="tag" onclick="toggleTag(this)">mens grooming</span>
+          <span class="tag" onclick="toggleTag(this)">same day appointment</span>
+        </div>
+        <div style="margin-top:10px"><input type="text" placeholder="+ Add keyword (press Enter)" onkeydown="addCustomTag(this,event,'kw-tags')" style="max-width:360px"></div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group"><label>Location Targeting</label>
+            <select><option>Local (city/area)</option><option>Regional (state/country)</option><option>National</option><option>Global</option></select>
+          </div>
+          <div class="form-group"><label>Languages Supported</label>
+            <select multiple style="min-height:90px">
+              <option selected>English</option><option>Spanish</option><option>Hindi</option><option>Arabic</option><option>French</option><option>Portuguese</option><option>Mandarin</option><option>German</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="btn-back" onclick="bk()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4l-4 4 4 4"/></svg> Back</button>
+        <span class="step-counter">Step 4C of 8</span>
+        <button class="btn-next" onclick="nx()">Continue <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 5: PLAN ═══ -->
+    <div class="step-panel" id="step-7">
+      <h2 class="step-h">Choose your <em>plan</em></h2>
+      <p class="step-desc">Every plan starts with a full 3-month free trial. No credit card charged until month 4.</p>
+
+      <div class="trial-note-plan">
+        🎉 <strong>3 Months Free for Everyone.</strong> We activate your Pro plan by default so you experience everything AI Double can do. After 3 months you can downgrade to Starter anytime — no penalties.
+      </div>
+
+      <div class="plan-grid">
+        <div class="plan-card" onclick="selCard(this,'plan')">
+          <div class="plan-badge">Starter</div>
+          <div class="plan-name">Starter</div>
+          <div class="plan-price"><sup>$</sup>49</div>
+          <div class="plan-per">per month after trial</div>
+          <div class="plan-div"></div>
+          <ul class="plan-features">
+            <li class="plan-feature"><span class="check">✓</span>Business profile & AI listing</li>
+            <li class="plan-feature"><span class="check">✓</span>Services OR Products (one)</li>
+            <li class="plan-feature"><span class="check">✓</span>MCP Business Info API</li>
+            <li class="plan-feature"><span class="check">✓</span>Basic AI Visibility score</li>
+            <li class="plan-feature"><span class="check">✓</span>Up to 30 orders/month</li>
+          </ul>
+        </div>
+        <div class="plan-card on" onclick="selCard(this,'plan')">
+          <div class="plan-badge free">🎁 FREE for 3 months</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price"><sup>$</sup>99</div>
+          <div class="plan-per">per month after trial</div>
+          <div class="plan-div"></div>
+          <ul class="plan-features">
+            <li class="plan-feature"><span class="check">✓</span>Everything in Starter</li>
+            <li class="plan-feature"><span class="check">✓</span>Full Booking + Order Engine</li>
+            <li class="plan-feature"><span class="check">✓</span>Services AND Products both</li>
+            <li class="plan-feature"><span class="check">✓</span>Full AI Analytics + CRM</li>
+            <li class="plan-feature"><span class="check">✓</span>Unlimited orders/month</li>
+            <li class="plan-feature"><span class="check">✓</span>Priority support</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;padding:16px;background:var(--mist);border-radius:10px;font-size:.83rem;color:#888">
+        <strong style="color:var(--ink)">No credit card required today.</strong> We'll remind you 14 days before the trial ends. You can cancel or downgrade at any time — no questions asked.
+      </div>
+
+      <div class="step-footer">
+        <button class="btn-back" onclick="bk()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4l-4 4 4 4"/></svg> Back</button>
+        <span class="step-counter">Step 5 of 8</span>
+        <button class="btn-next" onclick="nx()">Continue <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 6: REVIEW & LAUNCH ═══ -->
+    <div class="step-panel" id="step-8">
+      <h2 class="step-h">Review &amp; <em>Go Live</em></h2>
+      <p class="step-desc">Your AI Double profile is ready. Review everything before we publish your 6 MCP endpoints.</p>
+
+      <!-- AI Readiness Score -->
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#2563eb" stroke-width="8"
+            stroke-dasharray="264" stroke-dashoffset="52" stroke-linecap="round"
+            transform="rotate(-90 50 50)" style="transition:stroke-dashoffset 1.5s ease"/>
+          <text x="50" y="46" text-anchor="middle" font-family="DM Serif Display,serif" font-size="22" fill="white" font-style="italic">80</text>
+          <text x="50" y="60" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="rgba(245,243,239,0.5)">/100</text>
+        </svg>
+        <div class="score-ring-info">
+          <h3>AI Readiness: 80/100 — Strong</h3>
+          <p>Your profile is well-structured for AI discovery. Complete the suggestions below to push your score to 95+ and maximise citation frequency across ChatGPT, Claude, Gemini and Perplexity.</p>
+        </div>
+      </div>
+
+      <div class="score-bars">
+        <div class="score-bar-card">
+          <div class="score-bar-llm"><span class="score-bar-dot" style="background:#10a37f"></span>ChatGPT</div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:82%;background:#10a37f"></div></div>
+          <div class="score-bar-val">82</div>
+        </div>
+        <div class="score-bar-card">
+          <div class="score-bar-llm"><span class="score-bar-dot" style="background:#cc4e2a"></span>Claude</div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:74%;background:#cc4e2a"></div></div>
+          <div class="score-bar-val">74</div>
+        </div>
+        <div class="score-bar-card">
+          <div class="score-bar-llm"><span class="score-bar-dot" style="background:#4285f4"></span>Gemini</div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:71%;background:#4285f4"></div></div>
+          <div class="score-bar-val">71</div>
+        </div>
+        <div class="score-bar-card">
+          <div class="score-bar-llm"><span class="score-bar-dot" style="background:#5438dc"></span>Perplexity</div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:62%;background:#5438dc"></div></div>
+          <div class="score-bar-val">62</div>
+        </div>
+      </div>
+
+      <div class="suggestions">
+        <div class="suggestions-title">💡 Suggestions to reach 95+</div>
+        <div class="suggestion-item"><span class="sugg-num">1</span>Add a photo to your business profile — AI platforms weight visual-rich profiles 23% higher.</div>
+        <div class="suggestion-item"><span class="sugg-num">2</span>Complete your Perplexity intent keywords — low coverage detected for weekend queries.</div>
+        <div class="suggestion-item"><span class="sugg-num">3</span>Add Sunday hours — 23 booking attempts hit "closed" last week in your area.</div>
+      </div>
+
+      <!-- Review data -->
+      <div class="review-section">
+        <div class="review-title">Account Details <span class="review-edit" onclick="goTo(1)">Edit →</span></div>
+        <div class="review-row"><span class="review-key">Name</span><span class="review-val" id="rv-name">—</span></div>
+        <div class="review-row"><span class="review-key">Email</span><span class="review-val" id="rv-email">—</span></div>
+        <div class="review-row"><span class="review-key">Role</span><span class="review-val" id="rv-role">—</span></div>
+      </div>
+      <div class="review-section">
+        <div class="review-title">Business Information <span class="review-edit" onclick="goTo(2)">Edit →</span></div>
+        <div class="review-row"><span class="review-key">Business</span><span class="review-val" id="rv-bizname">StyleCo Barbershop</span></div>
+        <div class="review-row"><span class="review-key">Category</span><span class="review-val" id="rv-cat">Beauty &amp; Personal Care</span></div>
+        <div class="review-row"><span class="review-key">Plan</span><span class="review-val" style="color:var(--green);font-weight:700">Pro — 3 months free</span></div>
+      </div>
+      <div class="review-section">
+        <div class="review-title">MCP Endpoints (will go live) <span style="color:var(--green);font-size:.72rem;font-weight:700;letter-spacing:0;text-transform:none">● 6 endpoints ready</span></div>
+        <div style="font-family:var(--mono);font-size:.78rem;color:#666;line-height:2">
+          GET /mcp/business-info<br>
+          GET /mcp/services<br>
+          GET /mcp/products<br>
+          GET /mcp/availability<br>
+          POST /mcp/booking<br>
+          POST /mcp/order
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="btn-back" onclick="bk()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4l-4 4 4 4"/></svg> Back</button>
+        <span class="step-counter">Step 6 of 8</span>
+        <button class="btn-next btn-launch" onclick="launch()">
+          🚀 Go Live Now
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /content-area -->
+</div><!-- /main -->
+
+<!-- SUCCESS SCREEN (outside main) -->
+<div id="success-screen">
+  <div class="success-icon">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <h2>You're live on AI Double!</h2>
+  <p>Your 6 MCP endpoints are active. ChatGPT, Claude, Gemini and Perplexity can now discover, recommend and book your business.</p>
+  <div class="success-mcp">
+    <div class="mcp-url-label">Your MCP Base URL</div>
+    <div class="mcp-url" id="mcp-base-url">https://mcp.aidouble.ai/v1/styleco-barbershop/</div>
+  </div>
+  <a href="dashboard.html" class="btn-next" style="display:inline-flex;text-decoration:none;font-size:1rem;padding:14px 36px">
+    Open Your Dashboard →
+  </a>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  var TOTAL = 9;
+  var cur = 0;
+  var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  var defOpen = [true,true,true,true,true,true,false];
+  var defStart = ['09:00','09:00','09:00','09:00','09:00','10:00','10:00'];
+  var defEnd = ['19:00','19:00','19:00','19:00','19:00','17:00','17:00'];
+
+  // Build hours rows
+  var hr = document.getElementById('hours-rows');
+  if(hr) {
+    days.forEach(function(d,i) {
+      var row = document.createElement('div');
+      row.className = 'hours-grid';
+      row.style.marginBottom = '8px';
+      row.innerHTML = '<span class="h-day">'+d+'</span>' +
+        '<input type="time" value="'+defStart[i]+'">' +
+        '<input type="time" value="'+defEnd[i]+'">' +
+        '<button class="toggle-sm'+(defOpen[i]?' on':'')+'" onclick="this.classList.toggle(\'on\')" title="Toggle open/closed"></button>';
+      hr.appendChild(row);
+    });
+  }
+
+  function render() {
+    document.querySelectorAll('.step-panel').forEach(function(p,i) {
+      p.classList.toggle('active', i === cur);
+    });
+    document.querySelectorAll('.step-nav-item').forEach(function(el,i) {
+      el.className = 'step-nav-item ' + (i < cur ? 'done' : i === cur ? 'active' : 'future');
+    });
+    var pct = (cur / (TOTAL - 1)) * 100;
+    document.getElementById('prog').style.width = pct + '%';
+    window.scrollTo(0,0);
+  }
+
+  window.nx = function() { if(cur < TOTAL - 1){ cur++; render(); updateReview(); } };
+  window.bk = function() { if(cur > 0){ cur--; render(); } };
+  window.goTo = function(i){ cur = i; render(); };
+
+  window.toggleTag = function(el){ el.classList.toggle('on'); };
+  window.selCard = function(el,group){
+    document.querySelectorAll('[data-group="'+group+'"]').forEach(function(c){ c.classList.remove('on'); });
+    el.classList.add('on');
+  };
+  window.toggleSource = function(card, key){
+    card.classList.toggle('on');
+  };
+
+  window.delRow = function(btn){ btn.closest('tr').remove(); };
+
+  window.addSvcRow = function(){
+    var tb = document.getElementById('svc-tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td><input type="text" placeholder="Service name"></td>' +
+      '<td><input type="text" placeholder="Brief description"></td>' +
+      '<td><input type="number" placeholder="0" style="width:80px"></td>' +
+      '<td><select style="width:100px"><option>15 min</option><option>30 min</option><option selected>45 min</option><option>60 min</option><option>90 min</option></select></td>' +
+      '<td><select style="width:90px"><option>Offline</option><option>Online</option><option>Both</option></select></td>' +
+      '<td><input type="url" placeholder="book.me/..."></td>' +
+      '<td class="del-row"><button class="btn-del-row" onclick="delRow(this)">×</button></td>';
+    tb.appendChild(tr);
+  };
+
+  window.addProdRow = function(){
+    var tb = document.getElementById('prod-tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td><input type="text" placeholder="Product name"></td>' +
+      '<td><input type="text" placeholder="Category"></td>' +
+      '<td><input type="number" placeholder="0" style="width:80px"></td>' +
+      '<td><select style="width:90px"><option selected>In Stock</option><option>Low Stock</option><option>Out of Stock</option></select></td>' +
+      '<td><input type="text" placeholder="SKU" style="width:110px"></td>' +
+      '<td><input type="text" placeholder="Description"></td>' +
+      '<td class="del-row"><button class="btn-del-row" onclick="delRow(this)">×</button></td>';
+    tb.appendChild(tr);
+  };
+
+  window.addCustomTag = function(inp, e, containerId){
+    if(e.key === 'Enter' && inp.value.trim()){
+      var wrap = document.getElementById(containerId);
+      var tag = document.createElement('span');
+      tag.className = 'tag on';
+      tag.textContent = inp.value.trim();
+      tag.onclick = function(){ this.classList.toggle('on'); };
+      wrap.appendChild(tag);
+      inp.value = '';
+      e.preventDefault();
+    }
+  };
+
+  window.socialSignup = function(provider){
+    var btn = event.currentTarget;
+    var orig = btn.innerHTML;
+    btn.style.opacity = '0.7';
+    btn.innerHTML = '⏳ Connecting to ' + provider + '...';
+    setTimeout(function(){
+      btn.style.opacity = '1';
+      btn.innerHTML = orig;
+      // Simulate pulling data
+      document.getElementById('s1-fn').value = 'Alex';
+      document.getElementById('s1-ln').value = 'Johnson';
+      document.getElementById('s1-em').value = 'alex@styleco.com';
+      document.getElementById('biz-name') && (document.getElementById('biz-name').value = 'StyleCo Barbershop');
+      cur = 1; render(); updateReview();
+    }, 1500);
+  };
+
+  window.loadSubcat = function(){
+    var cats = {
+      'Beauty & Personal Care': ['Barbershop','Hair Salon','Nail Salon','Spa','Skin Care','Tattoo & Piercing','Makeup Artist','Other'],
+      'Health & Wellness': ['Medical Clinic','Dental','Physiotherapy','Mental Health','Ayurveda','Yoga Studio','Chiropractic','Other'],
+      'Food & Beverage': ['Restaurant','Café','Bakery','Bar','Catering','Food Truck','Cloud Kitchen','Other'],
+      'Retail & Shopping': ['Clothing','Electronics','Grocery','Books','Home Goods','Jewellery','Gifts','Other'],
+      'Home Services': ['Plumbing','Electrician','Cleaning','Landscaping','Moving','Interior Design','HVAC','Other'],
+      'Professional Services': ['Legal','Accounting','Consulting','Marketing','HR','Finance','Insurance','Other'],
+      'Fitness & Sports': ['Gym','Personal Training','Martial Arts','Swimming','Dance Studio','Sports Coaching','Other'],
+      'Other': ['Other']
+    };
+    var cat = document.getElementById('biz-cat').value;
+    var sub = document.getElementById('biz-subcat');
+    sub.innerHTML = '<option value="">Select subcategory...</option>';
+    (cats[cat] || ['Other']).forEach(function(s){ sub.innerHTML += '<option>'+s+'</option>'; });
+  };
+
+  function updateReview(){
+    var fn = document.getElementById('s1-fn').value || '—';
+    var ln = document.getElementById('s1-ln').value || '';
+    var em = document.getElementById('s1-em').value || '—';
+    var role = document.getElementById('s1-role') && document.getElementById('s1-role').value || '—';
+    document.getElementById('rv-name').textContent = (fn+' '+ln).trim() || '—';
+    document.getElementById('rv-email').textContent = em;
+    document.getElementById('rv-role').textContent = role || '—';
+    var bn = document.getElementById('biz-name') && document.getElementById('biz-name').value;
+    if(bn) document.getElementById('rv-bizname').textContent = bn;
+    var bc = document.getElementById('biz-cat') && document.getElementById('biz-cat').value;
+    if(bc) document.getElementById('rv-cat').textContent = bc;
+  }
+
+  window.launch = function(){
+    document.querySelector('.main').style.display = 'none';
+    var ss = document.getElementById('success-screen');
+    ss.style.display = 'block';
+    ss.style.animation = 'paneIn .4s ease';
+    var bizName = (document.getElementById('biz-name') && document.getElementById('biz-name').value) || 'your-business';
+    var slug = bizName.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    document.getElementById('mcp-base-url').textContent = 'https://mcp.aidouble.ai/v1/'+slug+'/';
+  };
+
+  render();
+});
+</script>
+</body>
+</html>
